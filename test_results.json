@@ -1,0 +1,100 @@
+[
+  {
+    "test": "Health Check",
+    "success": true,
+    "message": "Service is healthy",
+    "response_time": 0.0038187503814697266,
+    "timestamp": "2025-09-04T13:40:10.048776"
+  },
+  {
+    "test": "StirlingPDF Health",
+    "success": false,
+    "message": "Health check failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/info/status (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fe65c7fa8a0>: Failed to establish a new connection: [Errno 111] Connection refused'))",
+    "response_time": 0.0033044815063476562,
+    "timestamp": "2025-09-04T13:40:10.052128"
+  },
+  {
+    "test": "User Registration",
+    "success": false,
+    "message": "No response received",
+    "response_time": 0.0029087066650390625,
+    "timestamp": "2025-09-04T13:40:10.055085"
+  },
+  {
+    "test": "User Login",
+    "success": false,
+    "message": "No response received",
+    "response_time": 0.0017588138580322266,
+    "timestamp": "2025-09-04T13:40:10.056882"
+  },
+  {
+    "test": "File Upload",
+    "success": false,
+    "message": "HTTP No response",
+    "response_time": 0.0021104812622070312,
+    "timestamp": "2025-09-04T13:40:10.059029"
+  },
+  {
+    "test": "PDF Merge",
+    "success": true,
+    "message": "Job created: merge_20250904_134010",
+    "response_time": 0.0019571781158447266,
+    "timestamp": "2025-09-04T13:40:10.061034"
+  },
+  {
+    "test": "PDF Split",
+    "success": true,
+    "message": "Job created: split_20250904_134010",
+    "response_time": 0.0019578933715820312,
+    "timestamp": "2025-09-04T13:40:10.063035"
+  },
+  {
+    "test": "PDF Compress",
+    "success": true,
+    "message": "Job created: compress_20250904_134010",
+    "response_time": 0.0018966197967529297,
+    "timestamp": "2025-09-04T13:40:10.064977"
+  },
+  {
+    "test": "File Convert",
+    "success": true,
+    "message": "Job created: convert_20250904_134010",
+    "response_time": 0.001978635787963867,
+    "timestamp": "2025-09-04T13:40:10.067000"
+  },
+  {
+    "test": "Create Checkout",
+    "success": false,
+    "message": "No response received",
+    "response_time": 0.0017669200897216797,
+    "timestamp": "2025-09-04T13:40:10.068810"
+  },
+  {
+    "test": "Customer Portal",
+    "success": false,
+    "message": "No response received",
+    "response_time": 0.0017845630645751953,
+    "timestamp": "2025-09-04T13:40:10.070633"
+  },
+  {
+    "test": "Rate Limiting",
+    "success": true,
+    "message": "Rate limiting working correctly",
+    "response_time": null,
+    "timestamp": "2025-09-04T13:40:10.079500"
+  },
+  {
+    "test": "404 Error Handling",
+    "success": false,
+    "message": "Expected 404, got No response",
+    "response_time": 0.0016608238220214844,
+    "timestamp": "2025-09-04T13:40:10.081199"
+  },
+  {
+    "test": "Invalid JSON Handling",
+    "success": false,
+    "message": "Expected 400/422, got No response",
+    "response_time": 0.0019266605377197266,
+    "timestamp": "2025-09-04T13:40:10.083173"
+  }
+]
