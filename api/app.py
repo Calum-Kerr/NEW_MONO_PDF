@@ -217,6 +217,9 @@ def get_profile():
 @log_performance("file_upload")
 def upload_file():
     """Upload a file for processing."""
+    if not file_manager:
+        return create_error_response("File storage service not available", 503)
+    
     try:
         if 'file' not in request.files:
             return create_error_response("No file provided")
@@ -229,7 +232,7 @@ def upload_file():
         # Get user info if authenticated
         user = None
         auth_header = request.headers.get('Authorization')
-        if auth_header and auth_header.startswith('Bearer '):
+        if auth_header and auth_header.startswith('Bearer ') and auth_manager:
             token = auth_header.split(' ')[1]
             user = auth_manager.verify_session(token)
         
@@ -242,16 +245,17 @@ def upload_file():
         result = file_manager.upload_file(file_data, file.filename, user_id)
         
         if result['success']:
-            audit_logger.log_action(
-                action="file_uploaded",
-                resource_type="file",
-                user_id=user_id,
-                metadata={
-                    "filename": file.filename,
-                    "file_size": result['file_size'],
-                    "is_pdf": result['is_pdf']
-                }
-            )
+            if audit_logger:
+                audit_logger.log_action(
+                    action="file_uploaded",
+                    resource_type="file",
+                    user_id=user_id,
+                    metadata={
+                        "filename": file.filename,
+                        "file_size": result['file_size'],
+                        "is_pdf": result['is_pdf']
+                    }
+                )
             
             return create_success_response({
                 "file_id": result['secure_filename'],
