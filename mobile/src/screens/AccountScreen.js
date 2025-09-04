@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   avatar: {
     alignSelf: 'center',
     marginBottom: 16,
-    backgroundColor: '#007bff',
+    backgroundColor: '#238287',
   },
   loginTitle: {
     fontSize: 24,
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   profileAvatar: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#238287',
     marginRight: 16,
   },
   profileInfo: {
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   usageNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#007bff',
+    color: '#238287',
   },
   usageLabel: {
     fontSize: 12,
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#007bff',
+    backgroundColor: '#238287',
     borderRadius: 4,
   },
   progressText: {

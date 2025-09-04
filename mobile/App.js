@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 
 const theme = {
   colors: {
-    primary: '#007bff',
+    primary: '#238287',
     accent: '#28a745',
     background: '#ffffff',
     surface: '#f8f9fa',
