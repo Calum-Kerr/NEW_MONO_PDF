@@ -88,13 +88,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Tools</a>
+                        <a class="nav-link" href="#tools">Tools</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pricing">Pricing</a>
+                        <a class="nav-link" href="/revisepdf/">PDF Editor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/blog">Blog</a>
+                        <a class="nav-link" href="#features">Features</a>
                     </li>
                 </ul>
                 
@@ -110,8 +110,8 @@
                             <span id="user-name">User</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/account">Account</a></li>
-                            <li><a class="dropdown-item" href="/history">History</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showNotification('Account page coming soon!', 'info')">Account</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showNotification('History page coming soon!', 'info')">History</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
                         </ul>
@@ -137,8 +137,8 @@
                         <a href="#tools" class="btn btn-primary btn-lg">
                             <i class="bi bi-tools me-2"></i>Start Now
                         </a>
-                        <a href="/pricing" class="btn btn-outline-primary btn-lg">
-                            <i class="bi bi-star me-2"></i>Go Pro
+                        <a href="/revisepdf/" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-pencil-square me-2"></i>PDF Editor
                         </a>
                     </div>
                 </div>
@@ -272,7 +272,7 @@
     </section>
 
     <!-- Features Section -->
-    <section class="features-section bg-light py-5">
+    <section id="features" class="features-section bg-light py-5">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="fw-bold">Why Choose SnackPDF?</h2>
@@ -370,7 +370,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="login-password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="login-password" required>
+                            <input type="password" class="form-control" id="login-password" autocomplete="current-password" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Login</button>
                     </form>
@@ -404,7 +404,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="register-password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="register-password" required>
+                            <input type="password" class="form-control" id="register-password" autocomplete="new-password" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                     </form>
@@ -435,29 +435,28 @@
                 <div class="col-md-2">
                     <h6 class="fw-bold mb-3">Tools</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-muted text-decoration-none">Merge PDF</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Split PDF</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Compress PDF</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Convert PDF</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none" onclick="selectTool('merge')">Merge PDF</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none" onclick="selectTool('split')">Split PDF</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none" onclick="selectTool('compress')">Compress PDF</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none" onclick="selectTool('convert')">Convert PDF</a></li>
                     </ul>
                 </div>
                 
                 <div class="col-md-2">
-                    <h6 class="fw-bold mb-3">Company</h6>
+                    <h6 class="fw-bold mb-3">Apps</h6>
                     <ul class="list-unstyled">
-                        <li><a href="/about" class="text-muted text-decoration-none">About</a></li>
-                        <li><a href="/pricing" class="text-muted text-decoration-none">Pricing</a></li>
-                        <li><a href="/blog" class="text-muted text-decoration-none">Blog</a></li>
-                        <li><a href="/contact" class="text-muted text-decoration-none">Contact</a></li>
+                        <li><a href="#tools" class="text-muted text-decoration-none">SnackPDF Tools</a></li>
+                        <li><a href="/revisepdf/" class="text-muted text-decoration-none">RevisePDF Editor</a></li>
+                        <li><a href="#features" class="text-muted text-decoration-none">Features</a></li>
                     </ul>
                 </div>
                 
                 <div class="col-md-2">
                     <h6 class="fw-bold mb-3">Legal</h6>
                     <ul class="list-unstyled">
-                        <li><a href="/privacy" class="text-muted text-decoration-none">Privacy Policy</a></li>
-                        <li><a href="/terms" class="text-muted text-decoration-none">Terms of Service</a></li>
-                        <li><a href="/cookies" class="text-muted text-decoration-none">Cookie Policy</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Terms of Service</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Cookie Policy</a></li>
                     </ul>
                 </div>
                 
