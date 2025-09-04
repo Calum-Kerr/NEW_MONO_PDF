@@ -38,6 +38,31 @@ except ImportError as e:
     print(f"Warning: White-label manager not available: {e}")
     whitelabel_manager = None
 
+# Import new Phase 4 modules
+try:
+    from .ai_analysis import ai_analysis_manager
+except (ImportError, ValueError) as e:
+    print(f"Warning: AI analysis manager not available: {e}")
+    ai_analysis_manager = None
+
+try:
+    from .collaboration import collaboration_manager
+except (ImportError, ValueError) as e:
+    print(f"Warning: Collaboration manager not available: {e}")
+    collaboration_manager = None
+
+try:
+    from .cloud_storage import cloud_storage_manager
+except (ImportError, ValueError) as e:
+    print(f"Warning: Cloud storage manager not available: {e}")
+    cloud_storage_manager = None
+
+try:
+    from .security import security_manager
+except (ImportError, ValueError) as e:
+    print(f"Warning: Security manager not available: {e}")
+    security_manager = None
+
 # Conditional imports to handle missing environment variables gracefully
 try:
     from .auth import auth_manager
@@ -74,6 +99,10 @@ __all__ = [
     'api_key_manager',
     'analytics_manager',
     'whitelabel_manager',
+    'ai_analysis_manager',
+    'collaboration_manager',
+    'cloud_storage_manager',
+    'security_manager',
     'rate_limiter',
     'audit_logger',
     'email_manager',

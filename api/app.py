@@ -17,6 +17,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core import (
     auth_manager, payment_manager, file_manager, audit_logger, stirling_client,
     api_key_manager, analytics_manager, whitelabel_manager,
+    ai_analysis_manager, collaboration_manager, cloud_storage_manager, security_manager,
     create_error_response, create_success_response, require_rate_limit,
     log_performance
 )
@@ -1215,6 +1216,636 @@ def check_auth_or_api_key(request):
         'success': False,
         'error': 'Authentication required'
     }
+
+# Phase 4: AI-powered document analysis endpoints
+@app.route('/api/ai/analyze-document', methods=['POST'])
+@require_rate_limit(max_requests=20, window_seconds=3600)
+@log_performance("ai_analyze_document")
+def analyze_document():
+    """Analyze document using AI for insights and summary."""
+    if not ai_analysis_manager:
+        return create_error_response("AI analysis service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        if 'file' not in request.files:
+            return create_error_response("No file provided")
+        
+        file = request.files['file']
+        if not file or file.filename == '':
+            return create_error_response("No file selected")
+        
+        # Get analysis parameters
+        analysis_type = request.form.get('analysis_type', 'comprehensive')
+        
+        # Save uploaded file temporarily
+        import tempfile
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+            file.save(temp_file.name)
+            
+            # Perform AI analysis
+            result = ai_analysis_manager.analyze_document(
+                temp_file.name, 
+                file_type='pdf',
+                analysis_type=analysis_type
+            )
+            
+            # Clean up temp file
+            os.unlink(temp_file.name)
+        
+        # Track analytics
+        if analytics_manager:
+            analytics_manager.track_event(
+                'ai_document_analysis',
+                user_id=auth_result.get('user_id'),
+                api_key_id=auth_result.get('api_key_id'),
+                event_data={'analysis_type': analysis_type},
+                success=True
+            )
+        
+        # Convert result to dict for JSON response
+        result_dict = {
+            'document_id': result.document_id,
+            'analysis_type': result.analysis_type,
+            'summary': result.summary,
+            'key_points': result.key_points,
+            'sentiment': result.sentiment,
+            'language': result.language,
+            'word_count': result.word_count,
+            'page_count': result.page_count,
+            'confidence': result.confidence,
+            'insights': result.insights,
+            'created_at': result.created_at.isoformat()
+        }
+        
+        return create_success_response(result_dict, "Document analysis completed")
+    
+    except Exception as e:
+        app.logger.error(f"AI analysis error: {str(e)}")
+        return create_error_response("Document analysis failed")
+
+@app.route('/api/ai/get-insights', methods=['POST'])
+@require_rate_limit(max_requests=50, window_seconds=3600)
+@log_performance("ai_get_insights")
+def get_document_insights():
+    """Get quick insights about document content."""
+    if not ai_analysis_manager:
+        return create_error_response("AI analysis service not available", 503)
+    
+    try:
+        data = request.get_json()
+        if not data or 'text' not in data:
+            return create_error_response("Text content required")
+        
+        text = data['text']
+        insights = ai_analysis_manager.get_document_insights(text)
+        
+        return create_success_response(insights, "Document insights generated")
+    
+    except Exception as e:
+        app.logger.error(f"Insights error: {str(e)}")
+        return create_error_response("Failed to generate insights")
+
+# Phase 4: Collaborative editing endpoints
+@app.route('/api/collaboration/share-document', methods=['POST'])
+@require_rate_limit(max_requests=50, window_seconds=3600)
+@log_performance("collaboration_share_document")
+def share_document():
+    """Share a document for collaborative editing."""
+    if not collaboration_manager:
+        return create_error_response("Collaboration service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        data = request.get_json()
+        if not data or 'document_id' not in data:
+            return create_error_response("Document ID required")
+        
+        document_id = data['document_id']
+        title = data.get('title', 'Shared Document')
+        description = data.get('description')
+        public_access = data.get('public_access', False)
+        expires_at = None
+        
+        if data.get('expires_in_days'):
+            from datetime import datetime, timedelta
+            expires_at = datetime.utcnow() + timedelta(days=data['expires_in_days'])
+        
+        # Create document share
+        share = collaboration_manager.create_document_share(
+            document_id=document_id,
+            owner_id=auth_result['user_id'],
+            title=title,
+            description=description,
+            public_access=public_access,
+            expires_at=expires_at
+        )
+        
+        # Track analytics
+        if analytics_manager:
+            analytics_manager.track_event(
+                'document_shared',
+                user_id=auth_result.get('user_id'),
+                event_data={'public_access': public_access},
+                success=True
+            )
+        
+        # Convert to dict for JSON response
+        share_dict = {
+            'share_id': share.share_id,
+            'document_id': share.document_id,
+            'title': share.title,
+            'description': share.description,
+            'public_access': share.public_access,
+            'expires_at': share.expires_at.isoformat() if share.expires_at else None,
+            'created_at': share.created_at.isoformat(),
+            'share_url': f"https://revisepdf.com/shared/{share.share_id}"
+        }
+        
+        return create_success_response(share_dict, "Document shared successfully")
+    
+    except Exception as e:
+        app.logger.error(f"Document sharing error: {str(e)}")
+        return create_error_response("Failed to share document")
+
+@app.route('/api/collaboration/join-session', methods=['POST'])
+@require_rate_limit(max_requests=100, window_seconds=3600)
+@log_performance("collaboration_join_session")
+def join_collaboration_session():
+    """Join a collaborative editing session."""
+    if not collaboration_manager:
+        return create_error_response("Collaboration service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        data = request.get_json()
+        if not data or 'document_id' not in data:
+            return create_error_response("Document ID required")
+        
+        document_id = data['document_id']
+        username = data.get('username', 'Anonymous User')
+        
+        # Join session
+        presence = collaboration_manager.join_session(
+            document_id=document_id,
+            user_id=auth_result['user_id'],
+            username=username
+        )
+        
+        # Get active users
+        active_users = collaboration_manager.get_active_users(document_id)
+        
+        # Convert to dict for JSON response
+        presence_dict = {
+            'user_id': presence.user_id,
+            'username': presence.username,
+            'color': presence.color,
+            'permission_level': presence.permission_level.value,
+            'active_users_count': len(active_users)
+        }
+        
+        return create_success_response(presence_dict, "Joined collaboration session")
+    
+    except Exception as e:
+        app.logger.error(f"Join session error: {str(e)}")
+        return create_error_response("Failed to join collaboration session")
+
+@app.route('/api/collaboration/add-comment', methods=['POST'])
+@require_rate_limit(max_requests=200, window_seconds=3600)
+@log_performance("collaboration_add_comment")
+def add_comment():
+    """Add a comment to a document."""
+    if not collaboration_manager:
+        return create_error_response("Collaboration service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        data = request.get_json()
+        if not data or 'document_id' not in data or 'content' not in data:
+            return create_error_response("Document ID and content required")
+        
+        document_id = data['document_id']
+        content = data['content']
+        position = data.get('position', {})
+        username = data.get('username', 'Anonymous User')
+        
+        # Add comment
+        comment = collaboration_manager.add_comment(
+            document_id=document_id,
+            user_id=auth_result['user_id'],
+            username=username,
+            content=content,
+            position=position
+        )
+        
+        # Convert to dict for JSON response
+        comment_dict = {
+            'comment_id': comment.comment_id,
+            'document_id': comment.document_id,
+            'user_id': comment.user_id,
+            'username': comment.username,
+            'content': comment.content,
+            'position': comment.position,
+            'created_at': comment.created_at.isoformat()
+        }
+        
+        return create_success_response(comment_dict, "Comment added successfully")
+    
+    except Exception as e:
+        app.logger.error(f"Add comment error: {str(e)}")
+        return create_error_response("Failed to add comment")
+
+@app.route('/api/collaboration/get-comments/<document_id>', methods=['GET'])
+@log_performance("collaboration_get_comments")
+def get_comments(document_id):
+    """Get comments for a document."""
+    if not collaboration_manager:
+        return create_error_response("Collaboration service not available", 503)
+    
+    try:
+        include_resolved = request.args.get('include_resolved', 'false').lower() == 'true'
+        
+        comments = collaboration_manager.get_document_comments(
+            document_id, include_resolved
+        )
+        
+        # Convert to list of dicts
+        comments_list = []
+        for comment in comments:
+            comments_list.append({
+                'comment_id': comment.comment_id,
+                'user_id': comment.user_id,
+                'username': comment.username,
+                'content': comment.content,
+                'position': comment.position,
+                'resolved': comment.resolved,
+                'created_at': comment.created_at.isoformat()
+            })
+        
+        return create_success_response({
+            'comments': comments_list,
+            'total_count': len(comments_list)
+        }, "Comments retrieved successfully")
+    
+    except Exception as e:
+        app.logger.error(f"Get comments error: {str(e)}")
+        return create_error_response("Failed to get comments")
+
+# Phase 4: Cloud storage integration endpoints
+@app.route('/api/cloud/connect/<provider>', methods=['POST'])
+@require_rate_limit(max_requests=20, window_seconds=3600)
+@log_performance("cloud_connect")
+def connect_cloud_storage(provider):
+    """Connect user's cloud storage account."""
+    if not cloud_storage_manager:
+        return create_error_response("Cloud storage service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        data = request.get_json()
+        if not data or 'access_token' not in data:
+            return create_error_response("Access token required")
+        
+        access_token = data['access_token']
+        
+        # Add user token
+        success = cloud_storage_manager.add_user_token(
+            auth_result['user_id'], provider, access_token
+        )
+        
+        if success:
+            # Track analytics
+            if analytics_manager:
+                analytics_manager.track_event(
+                    'cloud_storage_connected',
+                    user_id=auth_result.get('user_id'),
+                    event_data={'provider': provider},
+                    success=True
+                )
+            
+            return create_success_response({
+                'provider': provider,
+                'connected': True
+            }, f"Connected to {provider} successfully")
+        else:
+            return create_error_response(f"Failed to connect to {provider}")
+    
+    except Exception as e:
+        app.logger.error(f"Cloud connect error: {str(e)}")
+        return create_error_response("Failed to connect cloud storage")
+
+@app.route('/api/cloud/list-files/<provider>', methods=['GET'])
+@require_rate_limit(max_requests=100, window_seconds=3600)
+@log_performance("cloud_list_files")
+def list_cloud_files(provider):
+    """List files from user's cloud storage."""
+    if not cloud_storage_manager:
+        return create_error_response("Cloud storage service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        folder_id = request.args.get('folder_id')
+        file_type = request.args.get('file_type')  # pdf, document, etc.
+        
+        files = cloud_storage_manager.get_user_files(
+            auth_result['user_id'], provider, folder_id, file_type
+        )
+        
+        # Convert files to list of dicts
+        files_list = []
+        for file in files:
+            files_list.append({
+                'file_id': file.file_id,
+                'name': file.name,
+                'size': file.size,
+                'mime_type': file.mime_type,
+                'provider': file.provider,
+                'web_view_url': file.web_view_url,
+                'thumbnail_url': file.thumbnail_url,
+                'modified_time': file.modified_time.isoformat(),
+                'is_folder': file.is_folder
+            })
+        
+        return create_success_response({
+            'provider': provider,
+            'files': files_list,
+            'total_count': len(files_list)
+        }, "Files listed successfully")
+    
+    except Exception as e:
+        app.logger.error(f"Cloud list files error: {str(e)}")
+        return create_error_response("Failed to list cloud files")
+
+@app.route('/api/cloud/upload/<provider>', methods=['POST'])
+@require_rate_limit(max_requests=50, window_seconds=3600)
+@log_performance("cloud_upload")
+def upload_to_cloud(provider):
+    """Upload file to user's cloud storage."""
+    if not cloud_storage_manager:
+        return create_error_response("Cloud storage service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        if 'file' not in request.files:
+            return create_error_response("No file provided")
+        
+        file = request.files['file']
+        if not file or file.filename == '':
+            return create_error_response("No file selected")
+        
+        folder_id = request.form.get('folder_id')
+        
+        # Save file temporarily
+        import tempfile
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            file.save(temp_file.name)
+            
+            # Upload to cloud
+            result = cloud_storage_manager.upload_to_cloud(
+                auth_result['user_id'], provider, temp_file.name, folder_id, file.filename
+            )
+            
+            # Clean up
+            os.unlink(temp_file.name)
+        
+        if result:
+            # Track analytics
+            if analytics_manager:
+                analytics_manager.track_event(
+                    'cloud_file_uploaded',
+                    user_id=auth_result.get('user_id'),
+                    event_data={'provider': provider, 'file_size': result.size},
+                    success=True
+                )
+            
+            result_dict = {
+                'file_id': result.file_id,
+                'name': result.name,
+                'size': result.size,
+                'provider': result.provider,
+                'web_view_url': result.web_view_url
+            }
+            
+            return create_success_response(result_dict, "File uploaded to cloud successfully")
+        else:
+            return create_error_response("Failed to upload file to cloud")
+    
+    except Exception as e:
+        app.logger.error(f"Cloud upload error: {str(e)}")
+        return create_error_response("Failed to upload to cloud")
+
+# Phase 4: Advanced security endpoints
+@app.route('/api/security/secure-document', methods=['POST'])
+@require_rate_limit(max_requests=30, window_seconds=3600)
+@log_performance("security_secure_document")
+def secure_document():
+    """Apply advanced security to a document."""
+    if not security_manager:
+        return create_error_response("Security service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        if 'file' not in request.files:
+            return create_error_response("No file provided")
+        
+        file = request.files['file']
+        if not file or file.filename == '':
+            return create_error_response("No file selected")
+        
+        # Get security parameters
+        security_level_str = request.form.get('security_level', 'standard')
+        password = request.form.get('password')
+        
+        # Parse DRM configuration
+        drm_config = {}
+        if request.form.get('max_views'):
+            drm_config['max_views'] = int(request.form.get('max_views'))
+        if request.form.get('max_downloads'):
+            drm_config['max_downloads'] = int(request.form.get('max_downloads'))
+        if request.form.get('expires_in_days'):
+            from datetime import datetime, timedelta
+            drm_config['expires_at'] = datetime.utcnow() + timedelta(days=int(request.form.get('expires_in_days')))
+        
+        allowed_actions = request.form.getlist('allowed_actions') or ['view']
+        drm_config['allowed_actions'] = allowed_actions
+        drm_config['name'] = f"Security policy for {file.filename}"
+        
+        # Map security level
+        from core.security import SecurityLevel
+        security_level_map = {
+            'none': SecurityLevel.NONE,
+            'basic': SecurityLevel.BASIC,
+            'standard': SecurityLevel.STANDARD,
+            'high': SecurityLevel.HIGH,
+            'enterprise': SecurityLevel.ENTERPRISE
+        }
+        security_level = security_level_map.get(security_level_str, SecurityLevel.STANDARD)
+        
+        # Save file temporarily
+        import tempfile
+        document_id = f"doc_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+        
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+            file.save(temp_file.name)
+            
+            # Apply security
+            doc_security = security_manager.secure_document(
+                document_id=document_id,
+                file_path=temp_file.name,
+                security_level=security_level,
+                creator_id=auth_result['user_id'],
+                password=password,
+                drm_config=drm_config if drm_config else None
+            )
+            
+            # Clean up
+            os.unlink(temp_file.name)
+        
+        # Track analytics
+        if analytics_manager:
+            analytics_manager.track_event(
+                'document_secured',
+                user_id=auth_result.get('user_id'),
+                event_data={
+                    'security_level': security_level_str,
+                    'has_password': bool(password),
+                    'has_drm': bool(drm_config)
+                },
+                success=True
+            )
+        
+        # Convert to dict for JSON response
+        result_dict = {
+            'document_id': doc_security.document_id,
+            'security_level': doc_security.security_level.value,
+            'encryption_enabled': doc_security.encryption_enabled,
+            'password_protected': doc_security.password_protected,
+            'drm_enabled': bool(doc_security.drm_policy_id),
+            'created_at': doc_security.created_at.isoformat()
+        }
+        
+        return create_success_response(result_dict, "Document secured successfully")
+    
+    except Exception as e:
+        app.logger.error(f"Document security error: {str(e)}")
+        return create_error_response("Failed to secure document")
+
+@app.route('/api/security/access-document', methods=['POST'])
+@require_rate_limit(max_requests=200, window_seconds=3600)
+@log_performance("security_access_document")
+def access_secure_document():
+    """Access a secured document with permission checking."""
+    if not security_manager:
+        return create_error_response("Security service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        data = request.get_json()
+        if not data or 'document_id' not in data or 'action' not in data:
+            return create_error_response("Document ID and action required")
+        
+        document_id = data['document_id']
+        action_str = data['action']
+        
+        # Map action string to enum
+        from core.security import AccessAction
+        action_map = {
+            'view': AccessAction.VIEW,
+            'download': AccessAction.DOWNLOAD,
+            'print': AccessAction.PRINT,
+            'copy': AccessAction.COPY,
+            'edit': AccessAction.EDIT,
+            'share': AccessAction.SHARE
+        }
+        action = action_map.get(action_str, AccessAction.VIEW)
+        
+        # Get client info
+        ip_address = request.remote_addr
+        user_agent = request.headers.get('User-Agent', '')
+        
+        # Check access
+        allowed, reason, decrypted_path = security_manager.access_document(
+            document_id=document_id,
+            user_id=auth_result['user_id'],
+            action=action,
+            ip_address=ip_address,
+            user_agent=user_agent
+        )
+        
+        if allowed:
+            return create_success_response({
+                'access_granted': True,
+                'document_id': document_id,
+                'action': action_str,
+                'decrypted_path': decrypted_path,
+                'message': 'Access granted'
+            }, "Document access granted")
+        else:
+            return create_error_response(f"Access denied: {reason}", 403)
+    
+    except Exception as e:
+        app.logger.error(f"Document access error: {str(e)}")
+        return create_error_response("Failed to access document")
+
+@app.route('/api/security/document-info/<document_id>', methods=['GET'])
+@log_performance("security_document_info")
+def get_document_security_info(document_id):
+    """Get security information for a document."""
+    if not security_manager:
+        return create_error_response("Security service not available", 503)
+    
+    # Check authentication
+    auth_result = check_auth_or_api_key(request)
+    if not auth_result['success']:
+        return create_error_response(auth_result['error'], 401)
+    
+    try:
+        info = security_manager.get_document_security_info(document_id)
+        
+        if info:
+            return create_success_response(info, "Document security info retrieved")
+        else:
+            return create_error_response("Document not found or no security applied", 404)
+    
+    except Exception as e:
+        app.logger.error(f"Security info error: {str(e)}")
+        return create_error_response("Failed to get security info")
 
 if __name__ == '__main__':
     # Development server
