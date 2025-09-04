@@ -1,0 +1,70 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Node modules (if using any Node.js tools)
+node_modules/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Database files
+*.db
+*.sqlite
+
+# Coverage reports
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Heroku files
+.heroku/
+
+# Backup files
+*.bak
+*.backup
+
+# Editor files
+*~
+*.orig
+
+# Static file caches
+.sass-cache/
+.cache/
+
+# Development artifacts
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
