@@ -301,4 +301,11 @@ class FileManager:
             return {"success": False, "error": f"List error: {str(e)}"}
 
 # Global file manager instance
-file_manager = FileManager()
+try:
+    file_manager = FileManager()
+except ValueError as e:
+    if "Missing Supabase configuration" in str(e):
+        print("Warning: Supabase not configured, file operations will be disabled")
+        file_manager = None
+    else:
+        raise

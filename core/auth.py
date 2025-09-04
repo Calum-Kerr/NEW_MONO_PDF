@@ -235,4 +235,11 @@ class AuthManager:
             return None
 
 # Global auth manager instance
-auth_manager = AuthManager()
+try:
+    auth_manager = AuthManager()
+except ValueError as e:
+    if "Missing Supabase configuration" in str(e):
+        print("Warning: Supabase not configured, authentication will be disabled")
+        auth_manager = None
+    else:
+        raise
