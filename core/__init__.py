@@ -1,7 +1,7 @@
 # Core module initialization
-from .auth import auth_manager
-from .payments import payment_manager
-from .files import file_manager
+import os
+
+# Import utilities first (no dependencies)
 from .utils import (
     rate_limiter,
     audit_logger, 
@@ -16,10 +16,42 @@ from .utils import (
     log_performance
 )
 
+# Import StirlingPDF client
+from .stirling_pdf import stirling_client
+
+# Conditional imports to handle missing environment variables gracefully
+try:
+    from .auth import auth_manager
+except ValueError as e:
+    if "Missing Supabase configuration" in str(e):
+        print("Warning: Supabase not configured, authentication will be disabled")
+        auth_manager = None
+    else:
+        raise
+
+try:
+    from .payments import payment_manager
+except ValueError as e:
+    if "Missing Stripe configuration" in str(e):
+        print("Warning: Stripe not configured, payments will be disabled")
+        payment_manager = None
+    else:
+        raise
+
+try:
+    from .files import file_manager
+except ValueError as e:
+    if "Missing" in str(e):
+        print("Warning: File storage not configured, file operations will be limited")
+        file_manager = None
+    else:
+        raise
+
 __all__ = [
     'auth_manager',
     'payment_manager', 
     'file_manager',
+    'stirling_client',
     'rate_limiter',
     'audit_logger',
     'email_manager',

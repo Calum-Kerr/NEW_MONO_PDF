@@ -9,8 +9,8 @@ import smtplib
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional, List
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from functools import wraps
 from flask import request, jsonify, g
 from supabase import create_client, Client
@@ -117,18 +117,18 @@ class EmailManager:
                 return False
             
             # Create message
-            msg = MimeMultipart('alternative')
+            msg = MIMEMultipart('alternative')
             msg['Subject'] = subject
             msg['From'] = f"{self.from_name} <{self.from_email}>"
             msg['To'] = to_email
             
             # Add text content
             if text_content:
-                part1 = MimeText(text_content, 'plain')
+                part1 = MIMEText(text_content, 'plain')
                 msg.attach(part1)
             
             # Add HTML content
-            part2 = MimeText(html_content, 'html')
+            part2 = MIMEText(html_content, 'html')
             msg.attach(part2)
             
             # Send email

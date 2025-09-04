@@ -19,7 +19,7 @@ class PaymentManager:
         self.service_key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
         
         if not all([self.stripe_secret_key, self.supabase_url, self.service_key]):
-            raise ValueError("Missing payment configuration")
+            raise ValueError("Missing Stripe configuration")
         
         stripe.api_key = self.stripe_secret_key
         self.supabase: Client = create_client(self.supabase_url, self.service_key)
@@ -396,4 +396,11 @@ class PaymentManager:
             return {"success": False, "error": str(e)}
 
 # Global payment manager instance
-payment_manager = PaymentManager()
+try:
+    payment_manager = PaymentManager()
+except ValueError as e:
+    if "Missing Stripe configuration" in str(e):
+        print("Warning: Stripe not configured, payment functionality will be disabled")
+        payment_manager = None
+    else:
+        raise
