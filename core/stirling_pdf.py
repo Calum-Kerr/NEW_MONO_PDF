@@ -113,17 +113,37 @@ class StirlingPDFClient:
         return self._make_request('/api/v1/general/split-pages', files=files, data=data)
     
     def compress_pdf(self, pdf_content: bytes, filename: str, 
-                     optimization_level: int = 1) -> Dict[str, Any]:
-        """Compress a PDF file to reduce its size."""
+                     optimization_level: int = 1, quality: int = 75,
+                     compression_algorithm: str = 'auto') -> Dict[str, Any]:
+        """Compress a PDF file with advanced compression algorithms."""
         files = {
             'fileInput': (filename, pdf_content, 'application/pdf')
         }
         
+        # Advanced compression options
         data = {
-            'optimizeLevel': str(optimization_level)  # 1-4, higher = more compression
+            'optimizeLevel': str(optimization_level),  # 1-4, higher = more compression
+            'imageQuality': str(quality),  # 10-100, image quality percentage
+            'algorithm': compression_algorithm,  # auto, lossless, lossy, hybrid
+            'removeMetadata': 'true',  # Remove metadata for smaller size
+            'linearize': 'true'  # Optimize for web viewing
         }
         
         return self._make_request('/api/v1/general/compress-pdf', files=files, data=data)
+    
+    def advanced_compress(self, pdf_content: bytes, filename: str,
+                         preset: str = 'balanced') -> Dict[str, Any]:
+        """Apply advanced compression presets for different use cases."""
+        presets = {
+            'web': {'optimization_level': 3, 'quality': 60, 'algorithm': 'lossy'},
+            'print': {'optimization_level': 2, 'quality': 85, 'algorithm': 'hybrid'},
+            'archive': {'optimization_level': 4, 'quality': 40, 'algorithm': 'lossy'},
+            'balanced': {'optimization_level': 2, 'quality': 75, 'algorithm': 'auto'},
+            'maximum': {'optimization_level': 4, 'quality': 30, 'algorithm': 'lossy'}
+        }
+        
+        settings = presets.get(preset, presets['balanced'])
+        return self.compress_pdf(pdf_content, filename, **settings)
     
     def convert_to_pdf(self, file_content: bytes, filename: str, 
                        file_type: str = None) -> Dict[str, Any]:
@@ -227,26 +247,56 @@ class StirlingPDFClient:
         return self._make_request('/api/v1/security/remove-password', files=files, data=data)
     
     def ocr_pdf(self, pdf_content: bytes, filename: str, 
-                languages: List[str] = None) -> Dict[str, Any]:
-        """Perform OCR on a PDF to make it searchable."""
+                languages: List[str] = None, ocr_type: str = 'auto',
+                dpi: int = 300, remove_blanks: bool = True) -> Dict[str, Any]:
+        """Perform OCR on a PDF to make it searchable with advanced options."""
+        files = {
+            'fileInput': (filename, pdf_content, 'application/pdf')
+        }
+        
+        # Extended language support
+        supported_languages = [
+            'eng', 'fra', 'deu', 'spa', 'ita', 'por', 'rus', 'chi_sim', 'chi_tra',
+            'jpn', 'kor', 'ara', 'hin', 'tha', 'vie', 'nld', 'swe', 'dan', 'nor'
+        ]
+        
+        if languages:
+            # Validate languages
+            valid_languages = [lang for lang in languages if lang in supported_languages]
+            if not valid_languages:
+                valid_languages = ['eng']  # Default fallback
+        else:
+            valid_languages = ['eng']
+        
+        data = {
+            'ocrType': ocr_type,  # auto, force-ocr, skip-text
+            'languages': ','.join(valid_languages),
+            'dpi': str(dpi),
+            'removeBlanks': str(remove_blanks).lower()
+        }
+        
+        return self._make_request('/api/v1/convert/pdf/ocr', files=files, data=data)
+    
+    def extract_text(self, pdf_content: bytes, filename: str, 
+                     format: str = 'txt', include_annotations: bool = False) -> Dict[str, Any]:
+        """Extract text content from a PDF with multiple format options."""
         files = {
             'fileInput': (filename, pdf_content, 'application/pdf')
         }
         
         data = {
-            'ocrType': 'auto',  # auto, force-ocr, skip-text
-            'languages': ','.join(languages) if languages else 'eng'
+            'format': format,  # 'txt', 'json', 'xml'
+            'includeAnnotations': str(include_annotations).lower()
         }
         
-        return self._make_request('/api/v1/convert/pdf/ocr', files=files, data=data)
-    
-    def extract_text(self, pdf_content: bytes, filename: str) -> Dict[str, Any]:
-        """Extract text content from a PDF."""
-        files = {
-            'fileInput': (filename, pdf_content, 'application/pdf')
+        endpoint_map = {
+            'txt': '/api/v1/convert/pdf/txt',
+            'json': '/api/v1/convert/pdf/json', 
+            'xml': '/api/v1/convert/pdf/xml'
         }
         
-        return self._make_request('/api/v1/convert/pdf/txt', files=files)
+        endpoint = endpoint_map.get(format, '/api/v1/convert/pdf/txt')
+        return self._make_request(endpoint, files=files, data=data)
     
     def health_check(self) -> Dict[str, Any]:
         """Check if StirlingPDF service is available."""
@@ -268,6 +318,74 @@ class StirlingPDFClient:
                 'success': False,
                 'error': f"Health check failed: {str(e)}"
             }
+    
+    def batch_process(self, operation: str, files_data: List[Dict], 
+                      operation_params: Dict = None) -> Dict[str, Any]:
+        """Process multiple files in batch with the same operation."""
+        if not files_data:
+            return {
+                'success': False,
+                'error': 'No files provided for batch processing'
+            }
+        
+        results = []
+        successful = 0
+        failed = 0
+        
+        for i, file_data in enumerate(files_data):
+            try:
+                pdf_content = file_data.get('content')
+                filename = file_data.get('filename', f'file_{i}.pdf')
+                
+                # Apply operation based on type
+                if operation == 'compress':
+                    preset = operation_params.get('preset', 'balanced') if operation_params else 'balanced'
+                    result = self.advanced_compress(pdf_content, filename, preset)
+                elif operation == 'ocr':
+                    languages = operation_params.get('languages', ['eng']) if operation_params else ['eng']
+                    result = self.ocr_pdf(pdf_content, filename, languages)
+                elif operation == 'extract_text':
+                    format = operation_params.get('format', 'txt') if operation_params else 'txt'
+                    result = self.extract_text(pdf_content, filename, format)
+                elif operation == 'rotate':
+                    angle = operation_params.get('angle', 90) if operation_params else 90
+                    result = self.rotate_pdf(pdf_content, filename, angle)
+                else:
+                    result = {
+                        'success': False,
+                        'error': f'Unsupported batch operation: {operation}'
+                    }
+                
+                results.append({
+                    'filename': filename,
+                    'success': result['success'],
+                    'result': result if result['success'] else None,
+                    'error': result.get('error') if not result['success'] else None
+                })
+                
+                if result['success']:
+                    successful += 1
+                else:
+                    failed += 1
+                    
+            except Exception as e:
+                results.append({
+                    'filename': file_data.get('filename', f'file_{i}.pdf'),
+                    'success': False,
+                    'error': f'Processing error: {str(e)}'
+                })
+                failed += 1
+        
+        return {
+            'success': True,
+            'results': results,
+            'summary': {
+                'total': len(files_data),
+                'successful': successful,
+                'failed': failed,
+                'success_rate': (successful / len(files_data)) * 100 if files_data else 0
+            }
+        }
 
 # Global instance
 stirling_client = StirlingPDFClient()

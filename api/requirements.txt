@@ -10,3 +10,8 @@ requests==2.31.0
 Pillow==10.0.1
 PyPDF2==3.0.1
 cryptography==41.0.7
+# New dependencies for Phase 3 features
+dataclasses-json==0.6.1
+redis==5.0.1
+celery==5.3.4
+APScheduler==3.10.4

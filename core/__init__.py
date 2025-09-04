@@ -19,6 +19,25 @@ from .utils import (
 # Import StirlingPDF client
 from .stirling_pdf import stirling_client
 
+# Import new Phase 3 modules
+try:
+    from .api_keys import api_key_manager
+except ImportError as e:
+    print(f"Warning: API key manager not available: {e}")
+    api_key_manager = None
+
+try:
+    from .analytics import analytics_manager
+except ImportError as e:
+    print(f"Warning: Analytics manager not available: {e}")
+    analytics_manager = None
+
+try:
+    from .whitelabel import whitelabel_manager
+except ImportError as e:
+    print(f"Warning: White-label manager not available: {e}")
+    whitelabel_manager = None
+
 # Conditional imports to handle missing environment variables gracefully
 try:
     from .auth import auth_manager
@@ -52,6 +71,9 @@ __all__ = [
     'payment_manager', 
     'file_manager',
     'stirling_client',
+    'api_key_manager',
+    'analytics_manager',
+    'whitelabel_manager',
     'rate_limiter',
     'audit_logger',
     'email_manager',
