@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>RevisePDF - Live PDF Editor | Edit, Fill, Sign PDFs Online</title>
+    <meta name="description" content="Professional online PDF editor to fill forms, add text, insert signatures, annotate, and edit PDF documents. Free and secure PDF editing tool.">
+    <meta name="keywords" content="PDF editor, fill PDF forms, sign PDF, annotate PDF, edit PDF online, PDF filler">
+    <meta name="author" content="RevisePDF">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="RevisePDF - Live PDF Editor">
+    <meta property="og:description" content="Professional online PDF editor to fill forms, add text, insert signatures, and annotate PDF documents.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://revisepdf.com">
+    <meta property="og:image" content="https://revisepdf.com/images/og-image.png">
+    <meta property="og:site_name" content="RevisePDF">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RevisePDF - Live PDF Editor">
+    <meta name="twitter:description" content="Professional online PDF editor to fill forms, add text, insert signatures, and annotate PDF documents.">
+    <meta name="twitter:image" content="https://revisepdf.com/images/twitter-card.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://revisepdf.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- PDF.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="/css/editor.css" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "@id": "https://revisepdf.com",
+        "name": "RevisePDF",
+        "description": "Professional online PDF editor for filling forms, adding signatures, and annotating documents",
+        "url": "https://revisepdf.com",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Fill PDF forms",
+            "Add digital signatures",
+            "Annotate PDFs",
+            "Add text and images",
+            "Draw and highlight"
+        ]
+    }
+    </script>
+</head>
+<body class="editor-body">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-pencil-square me-2"></i>RevisePDF
+            </a>
+            
+            <div class="navbar-nav me-auto">
+                <div class="nav-item dropdown" id="file-menu">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-file-earmark me-1"></i>File
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="openFile()">
+                            <i class="bi bi-folder-open me-2"></i>Open PDF
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="savePDF()">
+                            <i class="bi bi-download me-2"></i>Download
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="newDocument()">
+                            <i class="bi bi-file-plus me-2"></i>New Document
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="navbar-nav">
+                <div id="auth-buttons">
+                    <a class="nav-link" href="#" onclick="showLoginModal()">Login</a>
+                    <a class="btn btn-light btn-sm ms-2" href="#" onclick="showRegisterModal()">Sign Up</a>
+                </div>
+                
+                <div id="user-menu" class="dropdown d-none">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span id="user-name">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/account">Account</a></li>
+                        <li><a class="dropdown-item" href="/history">History</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <div class="welcome-content">
+                        <h1 class="display-4 fw-bold text-primary mb-4">
+                            <i class="bi bi-pencil-square me-3"></i>
+                            Professional PDF Editor
+                        </h1>
+                        <p class="lead text-muted mb-5">
+                            Fill forms, add signatures, annotate, and edit your PDF documents with our powerful online editor. 
+                            Professional features made simple and secure.
+                        </p>
+                        
+                        <div class="upload-area border-2 border-dashed border-primary rounded p-5 mb-4" 
+                             ondrop="handleFileDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                            <i class="bi bi-cloud-upload text-primary mb-3" style="font-size: 4rem;"></i>
+                            <h3 class="h4 mb-3">Drop your PDF file here</h3>
+                            <p class="text-muted mb-3">or click to browse</p>
+                            <input type="file" id="file-input" class="d-none" accept=".pdf" onchange="handleFileSelect(event)">
+                            <button class="btn btn-primary btn-lg" onclick="document.getElementById('file-input').click()">
+                                <i class="bi bi-folder-open me-2"></i>Choose PDF File
+                            </button>
+                        </div>
+                        
+                        <div class="features-grid row g-4 mt-5">
+                            <div class="col-md-3">
+                                <div class="feature-item text-center">
+                                    <i class="bi bi-input-cursor text-primary mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-bold">Fill Forms</h6>
+                                    <small class="text-muted">Add text to PDF forms and fields</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="feature-item text-center">
+                                    <i class="bi bi-signature text-success mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-bold">Add Signatures</h6>
+                                    <small class="text-muted">Insert digital signatures</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="feature-item text-center">
+                                    <i class="bi bi-highlighter text-warning mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-bold">Annotate</h6>
+                                    <small class="text-muted">Highlight and add notes</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="feature-item text-center">
+                                    <i class="bi bi-image text-info mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-bold">Add Images</h6>
+                                    <small class="text-muted">Insert logos and images</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Editor Interface -->
+    <div id="editor-interface" class="editor-interface d-none">
+        <!-- Toolbar -->
+        <div class="toolbar bg-light border-bottom">
+            <div class="container-fluid">
+                <div class="row align-items-center py-2">
+                    <div class="col-auto">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="zoomOut()">
+                                <i class="bi bi-zoom-out"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="zoom-level">100%</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="zoomIn()">
+                                <i class="bi bi-zoom-in"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-auto">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary btn-sm tool-btn active" data-tool="select" onclick="selectTool('select')">
+                                <i class="bi bi-cursor"></i> Select
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm tool-btn" data-tool="text" onclick="selectTool('text')">
+                                <i class="bi bi-type"></i> Text
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm tool-btn" data-tool="signature" onclick="selectTool('signature')">
+                                <i class="bi bi-signature"></i> Sign
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm tool-btn" data-tool="highlight" onclick="selectTool('highlight')">
+                                <i class="bi bi-highlighter"></i> Highlight
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm tool-btn" data-tool="draw" onclick="selectTool('draw')">
+                                <i class="bi bi-brush"></i> Draw
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-auto ms-auto">
+                        <button type="button" class="btn btn-success btn-sm" onclick="savePDF()">
+                            <i class="bi bi-download me-1"></i>Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor Content -->
+        <div class="editor-content">
+            <div class="sidebar bg-light border-end">
+                <div class="sidebar-header p-3 border-bottom">
+                    <h6 class="mb-0 fw-bold">Pages</h6>
+                </div>
+                <div class="pages-list p-2" id="pages-list">
+                    <!-- Page thumbnails will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="viewer-container">
+                <div class="viewer-area" id="viewer-area">
+                    <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
+                    <div id="annotations-layer" class="annotations-layer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Tool Modal -->
+    <div class="modal fade" id="textModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Text</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="text-content" class="form-label">Text Content</label>
+                        <textarea class="form-control" id="text-content" rows="3" placeholder="Enter your text here..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="text-size" class="form-label">Font Size</label>
+                            <select class="form-select" id="text-size">
+                                <option value="12">12px</option>
+                                <option value="14" selected>14px</option>
+                                <option value="16">16px</option>
+                                <option value="18">18px</option>
+                                <option value="20">20px</option>
+                                <option value="24">24px</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="text-color" class="form-label">Color</label>
+                            <input type="color" class="form-control form-control-color" id="text-color" value="#000000">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="addTextElement()">Add Text</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signature Modal -->
+    <div class="modal fade" id="signatureModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Signature</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="signature-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="draw-tab" data-bs-toggle="tab" data-bs-target="#draw-signature" type="button" role="tab">
+                                Draw
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="type-tab" data-bs-toggle="tab" data-bs-target="#type-signature" type="button" role="tab">
+                                Type
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-3" id="signature-tab-content">
+                        <div class="tab-pane fade show active" id="draw-signature" role="tabpanel">
+                            <canvas id="signature-canvas" width="500" height="200" class="border w-100" style="cursor: crosshair;"></canvas>
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="clearSignature()">
+                                    <i class="bi bi-arrow-clockwise"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="type-signature" role="tabpanel">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="typed-signature" placeholder="Type your name">
+                            </div>
+                            <div class="signature-preview" id="signature-preview">
+                                Preview will appear here
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="addSignature()">Add Signature</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to RevisePDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label for="login-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p class="text-muted">Don't have an account? 
+                            <a href="#" onclick="showRegisterModal()">Sign up</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sign Up for RevisePDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form">
+                        <div class="mb-3">
+                            <label for="register-name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="register-name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="register-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="register-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p class="text-muted">Already have an account? 
+                            <a href="#" onclick="showLoginModal()">Login</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay d-none">
+        <div class="loading-content">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Loading PDF...</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="/js/editor.js"></script>
+    <script src="/js/pdf-viewer.js"></script>
+    <script src="/js/annotations.js"></script>
+</body>
+</html>
