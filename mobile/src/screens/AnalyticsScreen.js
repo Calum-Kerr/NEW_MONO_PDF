@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#007bff',
+    color: '#238287',
   },
   statLabel: {
     fontSize: 12,
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   },
   operationBar: {
     height: 8,
-    backgroundColor: '#007bff',
+    backgroundColor: '#238287',
     borderRadius: 4,
     marginLeft: 8,
     flex: 1,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   insightHighlight: {
     fontWeight: 'bold',
-    color: '#007bff',
+    color: '#238287',
   },
   noDataTitle: {
     fontSize: 18,

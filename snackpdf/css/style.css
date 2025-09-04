@@ -1,7 +1,57 @@
 /* SnackPDF Custom Styles */
 
 :root {
-    --primary-color: #007bff;
+    /* Brand Colors */
+    --primary-color: #238287;
+    --primary-dark: #1a5f63;
+    --primary-light: #e2f8f5;
+    
+    /* Primary Color Palette (Tailwind-inspired) */
+    --teal-50: #f0fdfa;
+    --teal-100: #ccfbf1;
+    --teal-200: #99f6e4;
+    --teal-300: #5eead4;
+    --teal-400: #2dd4bf;
+    --teal-500: #238287;
+    --teal-600: #0d9488;
+    --teal-700: #0f766e;
+    --teal-800: #115e59;
+    --teal-900: #134e4a;
+    
+    /* Text Colors */
+    --text-primary: #333;
+    --text-secondary: #666;
+    --text-light: #4a5568;
+    
+    /* Background Colors */
+    --bg-main: #ffffff;
+    --bg-light: #f8fafc;
+    --bg-gray: #f7fafc;
+    --bg-pdf-editor: #f9fafb;
+    
+    /* Footer Colors */
+    --footer-bg: #2d3748;
+    --footer-text: #ffffff;
+    --footer-links: #9ca3af;
+    
+    /* Form Colors */
+    --input-border: #d1d5db;
+    --input-focus: #238287;
+    --label-text: #374151;
+    
+    /* Status Colors */
+    --warning-bg: #fef3c7;
+    --warning-border: #fcd34d;
+    --warning-text: #92400e;
+    --danger-bg: #fef2f2;
+    --danger-border: #fecaca;
+    --danger-text: #991b1b;
+    
+    /* Border Colors */
+    --border-default: #e5e7eb;
+    --border-focus: #238287;
+    
+    /* Legacy Bootstrap Colors (for compatibility) */
     --secondary-color: #6c757d;
     --success-color: #28a745;
     --warning-color: #ffc107;
@@ -70,7 +120,7 @@ body {
 .ms-2 { margin-left: 0.5rem; }
 
 .text-center { text-align: center; }
-.text-primary { color: #007bff; }
+.text-primary { color: var(--primary-color); }
 .text-muted { color: #6c757d; }
 .text-dark { color: #212529; }
 
@@ -156,12 +206,12 @@ body {
 }
 
 .upload-area:hover {
-    background-color: rgba(0, 123, 255, 0.1);
+    background-color: var(--primary-light);
     border-color: var(--primary-color) !important;
 }
 
 .upload-area.dragover {
-    background-color: rgba(0, 123, 255, 0.2);
+    background-color: rgba(35, 130, 135, 0.2);
     border-color: var(--primary-color) !important;
     transform: scale(1.02);
 }
@@ -293,7 +343,7 @@ body {
     background-color: #fff;
     border-color: var(--primary-color);
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(35, 130, 135, 0.25);
 }
 
 /* Buttons */
@@ -322,26 +372,26 @@ body {
 
 .btn-primary {
     color: #fff;
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    border-color: #007bff;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border-color: var(--primary-color);
 }
 
 .btn-primary:hover {
     color: #fff;
-    background: linear-gradient(135deg, #0056b3, #004085);
-    border-color: #004085;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    background: linear-gradient(135deg, var(--primary-dark), var(--teal-800));
+    border-color: var(--primary-dark);
+    box-shadow: 0 4px 15px rgba(35, 130, 135, 0.3);
 }
 
 .btn-outline-primary {
-    color: #007bff;
-    border-color: #007bff;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .btn-outline-primary:hover {
     color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .btn-lg {
@@ -496,7 +546,7 @@ body {
 
 .form-control:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(35, 130, 135, 0.25);
 }
 
 /* Footer */
@@ -671,7 +721,7 @@ footer a:hover {
 }
 
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
 }
 
 /* Custom Scrollbar */

@@ -10,7 +10,7 @@ const HomeScreen = ({ navigation }) => {
       title: 'Merge PDFs',
       description: 'Combine multiple PDF files into one',
       icon: 'albums-outline',
-      color: '#007bff',
+      color: '#238287',
     },
     {
       id: 'split',
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: '#007bff',
+    backgroundColor: '#238287',
   },
 });
 
