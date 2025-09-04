@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnackPDF - All-in-One PDF Tools | Free Online PDF Editor</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Free online PDF tools for everyone. Merge, split, compress, convert, and edit PDF files instantly. No registration required for basic features.">
+    <meta name="keywords" content="PDF tools, merge PDF, split PDF, compress PDF, convert PDF, free PDF editor, online PDF">
+    <meta name="author" content="SnackPDF">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://snackpdf.com">
+    <meta property="og:title" content="SnackPDF - All-in-One PDF Tools">
+    <meta property="og:description" content="Free online PDF tools for everyone. Merge, split, compress, convert, and edit PDF files instantly.">
+    <meta property="og:image" content="https://snackpdf.com/static/img/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://snackpdf.com">
+    <meta property="twitter:title" content="SnackPDF - All-in-One PDF Tools">
+    <meta property="twitter:description" content="Free online PDF tools for everyone. Merge, split, compress, convert, and edit PDF files instantly.">
+    <meta property="twitter:image" content="https://snackpdf.com/static/img/og-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://snackpdf.com">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/apple-touch-icon.png">
+    
+    <!-- Bootstrap 5.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "SnackPDF",
+        "description": "Free online PDF tools for everyone. Merge, split, compress, convert, and edit PDF files instantly.",
+        "url": "https://snackpdf.com",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Merge PDF files",
+            "Split PDF documents",
+            "Compress PDF size",
+            "Convert files to PDF",
+            "PDF to image conversion",
+            "Secure file processing"
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="/">
+                <i class="bi bi-file-earmark-pdf me-2"></i>SnackPDF
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Tools</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pricing">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blog">Blog</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="auth-buttons">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary btn-sm ms-2" href="/register">Sign Up Free</a>
+                    </li>
+                </ul>
+                
+                <!-- User menu when logged in -->
+                <div class="dropdown d-none" id="user-menu">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span id="user-name">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logout-btn">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">All-in-One PDF Tools</h1>
+                    <p class="lead mb-4">Free online PDF tools for everyone. Merge, split, compress, convert, and edit PDF files instantly. No software installation required.</p>
+                    <div class="d-flex gap-3 mb-4">
+                        <button class="btn btn-primary btn-lg" onclick="scrollToTools()">
+                            <i class="bi bi-tools me-2"></i>Start Now
+                        </button>
+                        <a href="/pricing" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-star me-2"></i>Go Premium
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center text-muted">
+                        <i class="bi bi-shield-check me-2 text-success"></i>
+                        <small>100% secure • Files deleted after 24 hours</small>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="/static/img/hero-illustration.svg" alt="PDF Tools Illustration" class="img-fluid" style="max-height: 400px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Grid -->
+    <section class="py-5" id="tools">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="h1 fw-bold mb-3">Choose Your PDF Tool</h2>
+                <p class="lead text-muted">Professional PDF tools that work right in your browser</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Merge PDF -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 shadow-sm border-0 tool-card" data-tool="merge">
+                        <div class="card-body text-center p-4">
+                            <div class="tool-icon mb-3">
+                                <i class="bi bi-files text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Merge PDF</h3>
+                            <p class="text-muted mb-4">Combine multiple PDF files into one document</p>
+                            <button class="btn btn-primary w-100" onclick="selectTool('merge')">
+                                <i class="bi bi-plus-circle me-2"></i>Merge PDFs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Split PDF -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 shadow-sm border-0 tool-card" data-tool="split">
+                        <div class="card-body text-center p-4">
+                            <div class="tool-icon mb-3">
+                                <i class="bi bi-scissors text-warning" style="font-size: 3rem;"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Split PDF</h3>
+                            <p class="text-muted mb-4">Extract pages or split PDF into multiple documents</p>
+                            <button class="btn btn-warning w-100" onclick="selectTool('split')">
+                                <i class="bi bi-scissors me-2"></i>Split PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compress PDF -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 shadow-sm border-0 tool-card" data-tool="compress">
+                        <div class="card-body text-center p-4">
+                            <div class="tool-icon mb-3">
+                                <i class="bi bi-archive text-success" style="font-size: 3rem;"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Compress PDF</h3>
+                            <p class="text-muted mb-4">Reduce PDF file size while maintaining quality</p>
+                            <button class="btn btn-success w-100" onclick="selectTool('compress')">
+                                <i class="bi bi-arrow-down-circle me-2"></i>Compress PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Convert to PDF -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 shadow-sm border-0 tool-card" data-tool="convert-to-pdf">
+                        <div class="card-body text-center p-4">
+                            <div class="tool-icon mb-3">
+                                <i class="bi bi-arrow-right-circle text-info" style="font-size: 3rem;"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Convert to PDF</h3>
+                            <p class="text-muted mb-4">Convert Word, Excel, images to PDF format</p>
+                            <button class="btn btn-info w-100" onclick="selectTool('convert-to-pdf')">
+                                <i class="bi bi-file-arrow-up me-2"></i>Convert to PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF to Image -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 shadow-sm border-0 tool-card" data-tool="pdf-to-image">
+                        <div class="card-body text-center p-4">
+                            <div class="tool-icon mb-3">
+                                <i class="bi bi-image text-danger" style="font-size: 3rem;"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">PDF to Image</h3>
+                            <p class="text-muted mb-4">Convert PDF pages to JPG, PNG images</p>
+                            <button class="btn btn-danger w-100" onclick="selectTool('pdf-to-image')">
+                                <i class="bi bi-card-image me-2"></i>PDF to Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Tool - Edit PDF -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 shadow-sm border-0 tool-card premium-tool" data-tool="edit">
+                        <div class="card-body text-center p-4">
+                            <div class="tool-icon mb-3">
+                                <i class="bi bi-pencil-square text-purple" style="font-size: 3rem;"></i>
+                                <span class="badge bg-warning text-dark position-absolute top-0 start-50 translate-middle px-3 py-2">Premium</span>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Edit PDF</h3>
+                            <p class="text-muted mb-4">Add text, images, signatures to your PDF</p>
+                            <a href="https://revisepdf.com" class="btn btn-purple w-100">
+                                <i class="bi bi-pencil me-2"></i>Edit PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- File Upload Modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalTitle">Upload Files</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="upload-area" class="border-2 border-dashed border-primary p-5 text-center rounded">
+                        <i class="bi bi-cloud-upload text-primary mb-3" style="font-size: 3rem;"></i>
+                        <h4>Drop files here or click to browse</h4>
+                        <p class="text-muted">Supports PDF, DOC, DOCX, JPG, PNG (Max 10MB for free users)</p>
+                        <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="d-none">
+                        <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+                            <i class="bi bi-folder2-open me-2"></i>Choose Files
+                        </button>
+                    </div>
+                    
+                    <div id="file-list" class="mt-4 d-none">
+                        <h5>Selected Files:</h5>
+                        <div id="files-container"></div>
+                    </div>
+                    
+                    <div id="tool-options" class="mt-4 d-none">
+                        <!-- Tool-specific options will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="process-btn" disabled>
+                        <i class="bi bi-gear me-2"></i>Process Files
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-5">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5 id="processing-title">Processing your files...</h5>
+                    <div class="progress mt-3">
+                        <div class="progress-bar" role="progressbar" style="width: 0%" id="progress-bar"></div>
+                    </div>
+                    <p class="text-muted mt-2" id="processing-status">Starting...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="fw-bold">Why Choose SnackPDF?</h2>
+                    <p class="lead text-muted">Professional-grade PDF tools with user-friendly design</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <i class="bi bi-shield-check text-success mb-3" style="font-size: 2.5rem;"></i>
+                    <h4>100% Secure</h4>
+                    <p class="text-muted">Files are processed securely and deleted after 24 hours</p>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <i class="bi bi-lightning text-warning mb-3" style="font-size: 2.5rem;"></i>
+                    <h4>Lightning Fast</h4>
+                    <p class="text-muted">Process files in seconds with our optimized algorithms</p>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <i class="bi bi-phone text-primary mb-3" style="font-size: 2.5rem;"></i>
+                    <h4>Works Everywhere</h4>
+                    <p class="text-muted">Use on any device - desktop, tablet, or mobile</p>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <i class="bi bi-heart text-danger mb-3" style="font-size: 2.5rem;"></i>
+                    <h4>Easy to Use</h4>
+                    <p class="text-muted">Intuitive interface that anyone can master instantly</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-file-earmark-pdf me-2"></i>SnackPDF
+                    </h5>
+                    <p class="mb-3">The most complete set of PDF tools for all your document needs. Fast, secure, and always free for basic features.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h6 class="fw-bold mb-3">Tools</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Merge PDF</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Split PDF</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Compress PDF</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Convert PDF</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6 class="fw-bold mb-3">Company</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/about" class="text-light text-decoration-none">About</a></li>
+                        <li><a href="/blog" class="text-light text-decoration-none">Blog</a></li>
+                        <li><a href="/contact" class="text-light text-decoration-none">Contact</a></li>
+                        <li><a href="/careers" class="text-light text-decoration-none">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6 class="fw-bold mb-3">Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/help" class="text-light text-decoration-none">Help Center</a></li>
+                        <li><a href="/pricing" class="text-light text-decoration-none">Pricing</a></li>
+                        <li><a href="/api" class="text-light text-decoration-none">API</a></li>
+                        <li><a href="/status" class="text-light text-decoration-none">Status</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6 class="fw-bold mb-3">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/privacy" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="/terms" class="text-light text-decoration-none">Terms of Service</a></li>
+                        <li><a href="/cookies" class="text-light text-decoration-none">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 SnackPDF. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Made with <i class="bi bi-heart-fill text-danger"></i> for PDF lovers</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
